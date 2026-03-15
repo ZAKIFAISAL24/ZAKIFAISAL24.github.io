@@ -1,165 +1,95 @@
-/* Reset dan dasar */
+/* Dasar */
 body {
     margin: 0;
-    font-family: 'Segoe UI', Arial, sans-serif; /* Font sedikit lebih modern */
+    font-family: 'Segoe UI', Roboto, Helvetica, Arial, sans-serif;
     color: white;
-    overflow: hidden; /* sembunyikan scroll global */
-    background-color: #111;
+    overflow: hidden;
+    background-color: #0a0a0a;
 }
 
-/* Slide dasar */
+#rotate-warning {
+    position: fixed; top: 0; left: 0; width: 100%; height: 100%;
+    background: #000; color: #fff; display: none;
+    justify-content: center; align-items: center; z-index: 9999;
+}
+
+/* Slide */
 .slide {
-    position: absolute;
-    top: 0;
-    left: 0;
-    height: 100vh;
-    width: 100vw;
-    display: flex;
-    flex-direction: column;
-    justify-content: center;
-    align-items: center;
-    text-align: center;
-
-    opacity: 0;
-    transform: scale(0.98) rotateY(5deg);
-    transition: opacity 0.7s ease, transform 0.7s ease;
-    pointer-events: none;
-    background-size: cover;
-    background-position: center;
-    padding: 20px;
-    box-sizing: border-box;
-    overflow-y: auto; /* scroll vertikal untuk teks panjang */
+    position: absolute; top: 0; left: 0; height: 100vh; width: 100vw;
+    display: flex; flex-direction: column; justify-content: center;
+    align-items: center; text-align: center; padding: 40px;
+    box-sizing: border-box; opacity: 0;
+    transform: translateX(50px);
+    transition: all 0.8s cubic-bezier(0.4, 0, 0.2, 1);
+    background-size: cover; background-position: center;
 }
 
-/* Slide aktif */
-.slide.active {
-    opacity: 1;
-    transform: scale(1) rotateY(0deg);
-    pointer-events: auto;
+.slide.active { opacity: 1; transform: translateX(0); pointer-events: auto; }
+.slide.exit { opacity: 0; transform: translateX(-50px); }
+
+/* Backgrounds */
+.bg1 { background: linear-gradient(45deg, #0f2027, #203a43, #2c5364); }
+.bg2, .bg3, .bg4, .bg5, .bg6 { background-image: linear-gradient(rgba(0,0,0,0.6), rgba(0,0,0,0.6)), url("bacgrone.png"); }
+
+/* Tipografi */
+h1, h2 {
+    font-size: 2.5rem;
+    margin-bottom: 15px;
+    text-shadow: 2px 2px 10px rgba(0,0,0,0.5);
 }
 
-/* Animasi keluar (untuk script.js) */
-.slide.exit {
-    opacity: 0;
-    transform: scale(1.05) rotateY(-5deg);
-}
+.glow-text { color: #00d4ff; text-transform: uppercase; letter-spacing: 2px; }
 
-/* Background tiap slide */
-.bg1 { background: linear-gradient(135deg, #1e3c72, #2a5298); }
-.bg2 { background-image: url("bacgrone.png"); }
-.bg3 { background-image: url("bacgrone.png"); }
-.bg4 { background-image: url("bacgrone.png"); }
-.bg5 { background-image: url("bacgrone.png"); }
-.bg6 { background-image: url("bacgrone.png"); }
-.bg7 { background-image: url("akhir.jpg"); }
-
-/* Teks tetap terlihat di background */
-h1, h2, p {
-    background-color: rgba(0,0,0,0.5); /* Sedikit lebih gelap agar teks makin jelas */
-    padding: 10px 20px;
-    border-radius: 8px;
-    margin: 8px 0; 
-}
-
-/* Font untuk teks panjang */
 p {
-    font-size: 18px;
-    line-height: 1.6;
-    max-width: 800px; /* Agar teks tidak terlalu lebar di layar besar */
-}
-
-/* Teks kecil */
-.small {
-    font-size: 1.1em;
-    opacity: 0.9;
-    font-weight: bold;
-    color: #00d4ff;
-}
-
-/* Tombol kontrol slide */
-.controls {
-    position: fixed;
-    bottom: 25px;
-    left: 50%;
-    transform: translateX(-50%);
-    z-index: 100;
-    display: flex;
-    gap: 10px;
-}
-
-button {
-    padding: 12px 25px;
-    background: rgba(0, 0, 0, 0.7);
-    color: white;
-    border: 1px solid rgba(255,255,255,0.2);
-    border-radius: 50px; /* Tombol bulat lebih modern */
-    cursor: pointer;
-    transition: 0.3s;
-    font-size: 18px;
-}
-
-button:hover {
-    background: #00d4ff;
-    color: black;
-    transform: scale(1.1);
-}
-
-/* Link sosial media */
-.social-links {
-    margin-top: 20px;
+    font-size: 1.1rem; line-height: 1.6; max-width: 700px;
     background: rgba(255, 255, 255, 0.1);
-    padding: 15px;
-    border-radius: 12px;
+    backdrop-filter: blur(10px);
+    padding: 15px 25px; border-radius: 15px;
+    border: 1px solid rgba(255,255,255,0.1);
 }
 
-.social-links a {
-    color: #00d4ff; /* Warna biru cerah agar kontras */
-    text-decoration: none;
-    font-weight: bold;
-    margin: 0 10px;
-    transition: 0.3s;
-}
-
-.social-links a:hover {
-    color: white;
-    text-decoration: underline;
-}
-
-.categories {
-    display: flex;
-    justify-content: center;
-    gap: 15px;
-    margin-top: 20px;
-    flex-wrap: wrap;
-}
-
+/* Kategori & Answer Box */
+.categories { display: flex; gap: 15px; margin-bottom: 20px; flex-wrap: wrap; justify-content: center; }
 .category {
-    background-color: rgba(255, 255, 255, 0.1);
-    border: 1px solid rgba(255, 255, 255, 0.3);
-    padding: 12px 20px;
-    border-radius: 8px;
-    cursor: pointer;
-    transition: all 0.3s ease;
+    background: rgba(255,255,255,0.15); padding: 10px 20px; border-radius: 30px;
+    cursor: pointer; transition: 0.3s; border: 1px solid rgba(255,255,255,0.2);
+}
+.category:hover { background: #00d4ff; color: #000; transform: translateY(-3px); }
+
+.answer-box {
+    min-height: 60px; padding: 20px; background: rgba(0,0,0,0.4);
+    border-radius: 15px; border-left: 5px solid #00d4ff; width: 80%; max-width: 600px;
 }
 
-.category:hover {
-    background-color: #00d4ff;
-    color: black;
-    font-weight: bold;
+/* Profile & Social Buttons */
+.profile-img {
+    width: 180px; height: 180px; border-radius: 50%;
+    border: 4px solid #00d4ff; box-shadow: 0 0 20px rgba(0,212,255,0.5);
+    margin-bottom: 20px; object-fit: cover;
 }
 
-.blog-info {
-  font-size: 14px;
-  color: #dfdfdf;
-  background: rgba(0,0,0,0.3);
-  padding: 10px;
-  border-radius: 8px;
-  width: fit-content;
-  margin-bottom: 20px;
+.social-card { display: flex; gap: 10px; flex-wrap: wrap; justify-content: center; }
+.social-btn {
+    text-decoration: none; color: white; padding: 10px 20px;
+    border-radius: 8px; font-weight: bold; transition: 0.3s;
+    border: 1px solid rgba(255,255,255,0.2);
 }
+.social-btn.ig { background: #E1306C; }
+.social-btn.web { background: #2c5364; }
+.social-btn.yt { background: #FF0000; }
+.social-btn:hover { transform: scale(1.05); filter: brightness(1.2); box-shadow: 0 5px 15px rgba(0,0,0,0.3); }
 
-.blog-info p {
-  background: none; /* Hilangkan background hitam per baris */
-  margin: 3px 0;
-  padding: 0;
-    }
+/* Tombol Kontrol Navigasi */
+.controls { position: fixed; bottom: 30px; left: 50%; transform: translateX(-50%); z-index: 100; display: flex; gap: 20px; }
+.nav-btn {
+    width: 60px; height: 60px; border-radius: 50%; border: none;
+    background: rgba(255,255,255,0.1); backdrop-filter: blur(10px);
+    color: white; font-size: 24px; cursor: pointer; transition: 0.3s;
+    display: flex; align-items: center; justify-content: center;
+    border: 1px solid rgba(255,255,255,0.2);
+}
+.nav-btn:hover { background: #00d4ff; color: #000; box-shadow: 0 0 15px #00d4ff; }
+
+/* Info Atas */
+.blog-info { position: absolute; top: 20px; left: 20px; text-align: left; background: none; }
+.blog-info p { background: none; padding: 2px; font-size: 0.8rem; border: none; backdrop-filter: none; }
