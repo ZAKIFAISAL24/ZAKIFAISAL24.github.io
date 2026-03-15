@@ -1,84 +1,63 @@
 let slides = document.querySelectorAll(".slide");
 let current = 0;
 let isAnimating = false;
+let flipSound = new Audio("page-flip.mp3");
 
-// Pengaturan awal saat halaman dimuat
-document.addEventListener("DOMContentLoaded", function () {
-    // 1. Ambil tanggal update terakhir otomatis
-    let lastModified = new Date(document.lastModified);
-    let formattedUpdate = lastModified.toLocaleDateString("id-ID", {
-        day: "numeric",
-        month: "long",
-        year: "numeric"
-    });
-
+document.addEventListener("DOMContentLoaded", () => {
+    // Tanggal Update
     let updateElem = document.getElementById("updatedDate");
     if (updateElem) {
-        updateElem.textContent = formattedUpdate;
+        updateElem.textContent = new Date().toLocaleDateString("id-ID", {
+            day: "numeric", month: "long", year: "numeric"
+        });
     }
 
-    // 2. Logika klik kategori pada slide 3 (Biodata)
+    // Kategori
     const categories = document.querySelectorAll('.category');
     const answerBox = document.getElementById('answer');
-
     categories.forEach(cat => {
         cat.addEventListener('click', () => {
-            if (answerBox) {
+            answerBox.style.opacity = 0;
+            setTimeout(() => {
                 answerBox.textContent = cat.getAttribute('data-answer');
-            }
+                answerBox.style.opacity = 1;
+            }, 200);
         });
     });
 });
-
-// Efek suara transisi
-let flipSound = new Audio("page-flip.mp3");
 
 function showSlide(next) {
     if (isAnimating || next === current) return;
     isAnimating = true;
 
-    // Mainkan suara transisi
     flipSound.currentTime = 0;
-    flipSound.play().catch(e => console.log("Audio play dipending browser"));
+    flipSound.play().catch(() => {});
 
-    let currentSlide = slides[current];
-    let nextSlide = slides[next];
+    slides[current].classList.remove("active");
+    slides[current].classList.add("exit");
 
-    // Animasi transisi slide
-    currentSlide.classList.remove("active");
-    currentSlide.classList.add("exit");
-
-    nextSlide.classList.add("active");
+    slides[next].classList.add("active");
 
     setTimeout(() => {
-        currentSlide.classList.remove("exit");
+        slides[current].classList.remove("exit");
         current = next;
         isAnimating = false;
-    }, 800); // Harus sinkron dengan durasi di style.css
+    }, 800);
 }
 
-// Navigasi Tombol
-document.getElementById("next").addEventListener("click", () => {
-    let next = (current + 1) % slides.length;
-    showSlide(next);
-});
-
-document.getElementById("prev").addEventListener("click", () => {
-    let next = (current - 1 + slides.length) % slides.length;
-    showSlide(next);
-});
+document.getElementById("next").onclick = () => showSlide((current + 1) % slides.length);
+document.getElementById("prev").onclick = () => showSlide((current - 1 + slides.length) % slides.length);
 
 // Navigasi Keyboard
-document.addEventListener("keydown", (e) => {
-    if (e.key === "ArrowRight") {
-        let next = (current + 1) % slides.length;
-        showSlide(next);
-    }
-    if (e.key === "ArrowLeft") {
-        let next = (current - 1 + slides.length) % slides.length;
-        showSlide(next);
-    }
-});
+document.onkeydown = (e) => {
+    if (e.key === "ArrowRight") document.getElementById("next").click();
+    if (e.key === "ArrowLeft") document.getElementById("prev").click();
+};
 
-// Jalankan slide pertama
-showSlide(current);
+// Cek Orientasi
+function checkOri() {
+    document.getElementById("rotate-warning").style.display = 
+        window.innerHeight > window.innerWidth ? "flex" : "none";
+}
+window.onresize = checkOri;
+checkOri();
